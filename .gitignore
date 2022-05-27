@@ -1,0 +1,9 @@
+.env.*
+!.env.example
+
+.yarn
+.pnp.*
+
+postgres
+
+dist
