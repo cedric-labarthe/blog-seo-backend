@@ -1,4 +1,4 @@
-import { DataSource, ConnectionOptionsReader } from 'typeorm'
+import { DataSource } from 'typeorm'
 
 import entities from '../entities'
 import migrations from '../migrations'
