@@ -9,7 +9,10 @@
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "migration:run": "typeorm migration:run",
-    "migration:generate": "typeorm migration:generate"
+    "migration:generate": "typeorm migration:generate",
+    "postinstall": "husky install",
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable"
   },
   "packageManager": "yarn@3.2.1",
   "dependencies": {
@@ -36,6 +39,8 @@
     "supertest": "^6.2.3",
     "ts-jest": "^28.0.3",
     "ts-node": "^10.8.0",
-    "typescript": "^4.7.2"
+    "typescript": "^4.7.2",
+    "husky": "^8.0.0",
+    "pinst": "^3.0.0"
   }
 }
