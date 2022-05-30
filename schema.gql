@@ -3,11 +3,27 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type Article {
+  createdAt: DateTime!
+  deletedAt: DateTime!
+  id: ID!
+  short_description: String!
+  title: String!
+  updatedAt: DateTime!
+}
+
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
 type Mutation {
   createUser(input: UserInput!): User!
 }
 
 type Query {
+  getArticle(id: Float!): Article!
+  getArticles: [Article!]!
   getUser(id: Float!): User!
 }
 

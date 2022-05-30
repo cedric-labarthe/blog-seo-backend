@@ -1,3 +1,4 @@
 import { UserResolver } from './user.resolvers'
+import { ArticleResolvers } from './article.resolvers'
 
-export default [UserResolver] as const
+export default [UserResolver, ArticleResolvers] as const
