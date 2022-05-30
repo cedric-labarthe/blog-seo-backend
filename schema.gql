@@ -8,8 +8,15 @@ type Article {
   deletedAt: DateTime!
   id: ID!
   short_description: String!
+  text: String!
   title: String!
   updatedAt: DateTime!
+}
+
+input ArticleInput {
+  short_description: String!
+  text: String!
+  title: String!
 }
 
 """
@@ -18,6 +25,7 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 scalar DateTime
 
 type Mutation {
+  createArticle(input: ArticleInput!): Article!
   createUser(input: UserInput!): User!
 }
 

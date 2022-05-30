@@ -3,7 +3,8 @@ import 'reflect-metadata'
 import express from 'express'
 import './configs/env'
 
-import { graphqlHTTP } from 'express-graphql'
+import { ApolloServer } from 'apollo-server-express'
+
 import { buildSchema } from 'type-graphql'
 
 import resolvers from './resolvers'
@@ -14,11 +15,6 @@ const init = async () => {
 
   const PORT = Number(process.env.APP_PORT) || 8000
 
-  const schema = await buildSchema({
-    resolvers: resolvers,
-    emitSchemaFile: true,
-  })
-
   try {
     await AppDataSource.initialize()
     console.info('Data Source has been initialized! 🙌')
@@ -26,17 +22,24 @@ const init = async () => {
     console.error('Error during Data Source initialization 💩', error)
   }
 
-  app.use(
-    '/graphql',
-    graphqlHTTP({
-      schema: schema,
-      graphiql: true,
+  try {
+    const schema = await buildSchema({
+      resolvers: resolvers,
+      emitSchemaFile: true,
     })
-  )
 
-  app.listen(PORT)
+    const apolloServer = new ApolloServer({ schema })
+    await apolloServer.start()
+    apolloServer.applyMiddleware({ app })
 
-  console.log(`Server listening on http://localhost:${PORT}/graphql 👈 🔥🔥🔥`)
+    app.listen(PORT)
+
+    console.info(
+      `Server listening on http://localhost:${PORT}/graphql 👈 🔥🔥🔥`
+    )
+  } catch (error) {
+    console.warn(error)
+  }
 }
 
 init()

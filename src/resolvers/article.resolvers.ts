@@ -10,13 +10,16 @@ export class ArticleResolvers {
   }
 
   @Query(() => [Article])
-  async getArticles(): Promise<[Article[], number]> {
+  async getArticles(): Promise<Article[]> {
     const [articles, articlesCount] = await Article.findAndCount()
-    return [articles, articlesCount]
+    console.info(articlesCount)
+    return articles
   }
 
-  @Mutation()
-  async createArticle(@Arg('input') input: ArticleInput) {
+  @Mutation(() => Article)
+  async createArticle(
+    @Arg('input') input: ArticleInput
+  ): Promise<Partial<Article> | undefined> {
     try {
       // TODO add validation
       const newArticle = Article.create({ ...input })
