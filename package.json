@@ -6,6 +6,7 @@
     "start": "NODE_ENV=development nodemon --exec ts-node src/index.ts",
     "lint": "npx eslint",
     "prettier": "prettier",
+    "ci-test": "jest",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "migration:run": "typeorm migration:run",
