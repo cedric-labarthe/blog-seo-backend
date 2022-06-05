@@ -14,7 +14,8 @@ jobs:
           node-version-file: '.node-version'
           cache: 'yarn'
 
-      - nam.yarnrun: yarn install --immutable
+      - name: Install modules
+        run: yarn install --immutable
 
       - name: Run tests
         run: jest
