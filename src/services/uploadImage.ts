@@ -8,7 +8,7 @@ const storage = multer.diskStorage({
     callback(null, '/uploads/images') // TODO add error handler
   },
   filename(_, file, callback) {
-    callback(null, file.originalname) // TODO add error handler AND see for unique name/upload
+    callback(null, file.originalname) // TODO add error handler AND see for unique media name/upload
   },
 })
 
@@ -35,7 +35,9 @@ const uploadImage = async (req: Request, res: Response) => {
 
   console.info(image)
 
-  res.send('ok boy')
+  // TODO save path in db
+
+  res.send('Success and path')
 }
 
 router.post('/upload-image', upload.single, uploadImage)

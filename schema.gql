@@ -5,12 +5,12 @@
 
 type Article {
   createdAt: DateTime!
-  deletedAt: DateTime!
+  deletedAt: DateTime
   id: ID!
   short_description: String!
   text: String!
   title: String!
-  updatedAt: DateTime!
+  updatedAt: DateTime
 }
 
 input ArticleInput {
