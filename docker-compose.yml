@@ -17,6 +17,15 @@ services:
       - postgres
     restart: unless-stopped
 
+  db-test:
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-test}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-test-pwd}
+      POSTGRES_DB: test
+    ports:
+      - '54321:5432'
+
 networks:
   postgres:
     driver: bridge

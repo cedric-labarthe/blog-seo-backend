@@ -9,6 +9,7 @@ import { buildSchema } from 'type-graphql'
 
 import resolvers from './resolvers'
 import { AppDataSource } from './configs/data-source'
+import servicesRouter from './services'
 
 const init = async () => {
   const app = express()
@@ -32,6 +33,7 @@ const init = async () => {
     await apolloServer.start()
     apolloServer.applyMiddleware({ app })
 
+    app.use('/api/services', servicesRouter)
     app.listen(PORT)
 
     console.info(

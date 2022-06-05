@@ -17,27 +17,28 @@ export class Article extends BaseEntity {
   id!: number
 
   @Field(() => String)
-  @Column()
+  @Column({ nullable: false })
   title!: string
 
   @Field(() => String)
-  @Column()
+  @Column({ nullable: false })
   short_description: string
 
   @Field(() => String)
+  @Column({ nullable: false })
   text: string
 
   @Field(() => Date)
-  @CreateDateColumn()
+  @CreateDateColumn({ nullable: false })
   createdAt: Date
 
-  @Field(() => Date)
-  @UpdateDateColumn()
+  @Field(() => Date, { nullable: true })
+  @UpdateDateColumn({ nullable: true })
   updatedAt: Date
 
-  @Field(() => Date)
-  @DeleteDateColumn()
-  deletedAt: Date
+  @Field(() => Date, { nullable: true })
+  @DeleteDateColumn({ nullable: true })
+  deletedAt?: Date
 }
 
 @InputType()
