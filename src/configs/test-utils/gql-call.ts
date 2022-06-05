@@ -8,7 +8,7 @@ import resolvers from '../../resolvers'
 interface Options {
   source: string
   variableValues?: Maybe<{
-    [key: string]: any // eslint-disable-line
+    [key: string]: any // eslint-disable-line @typescript-eslint/no-explicit-any
   }>
   userId?: number
 }
