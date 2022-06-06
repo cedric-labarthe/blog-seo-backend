@@ -24,8 +24,8 @@ describe('Article resolvers', () => {
         createdAt
         updatedAt
         deletedAt
-  }
-}`
+      }
+    }`
 
     const response = await gqlCall({
       source: createArticle,
@@ -75,17 +75,17 @@ describe('Article resolvers', () => {
     }),
     it('should return an article by id', async () => {
       const getArticle = `
-    query Query($getArticleId: Float!) {
-      getArticle(id: $getArticleId) {
-        id
-        short_description
-        title
-        text
-        createdAt
-        updatedAt
-        deletedAt
-  }
-}`
+      query Query($getArticleId: Float!) {
+        getArticle(id: $getArticleId) {
+          id
+          short_description
+          title
+          text
+          createdAt
+          updatedAt
+          deletedAt
+        }
+      }`
 
       const response = await gqlCall({
         source: getArticle,
@@ -102,5 +102,36 @@ describe('Article resolvers', () => {
       expect(data).toHaveProperty('createdAt')
       expect(data).toHaveProperty('updatedAt')
       expect(data).toHaveProperty('id', createdId)
+    }),
+    it('should soft delete an article by id', async () => {
+      const softDeleteArticle = `
+      mutation Mutation($softDeleteArticleId: Float!) {
+        softDeleteArticle(id: $softDeleteArticleId) {
+          id
+          title
+          short_description
+          text
+          createdAt
+          updatedAt
+          deletedAt
+        }
+      }`
+
+      const response = await gqlCall({
+        source: softDeleteArticle,
+        variableValues: {
+          softDeleteArticleId: Number(createdId),
+        },
+      })
+
+      const data = response?.data?.softDeleteArticle
+
+      expect(data).toHaveProperty('title', 'test title')
+      expect(data).toHaveProperty('short_description', 'bla bla bla')
+      expect(data).toHaveProperty('text', 'Un grand bla bla bla')
+      expect(data).toHaveProperty('createdAt')
+      expect(data).toHaveProperty('updatedAt')
+      expect(data).toHaveProperty('id', createdId)
+      expect(data).toHaveProperty('deletedAt')
     })
 })

@@ -5,7 +5,7 @@ import { Article, ArticleInput } from '../entities'
 export class ArticleResolvers {
   @Query(() => Article)
   async getArticle(@Arg('id') id: number): Promise<Article | undefined> {
-    const article = await Article.findOneByOrFail({ id })
+    const article = await Article.findOneByOrFail({ id, deletedAt: undefined })
     return article
   }
 
@@ -25,6 +25,38 @@ export class ArticleResolvers {
       const newArticle = Article.create({ ...input })
       await newArticle.save()
       return newArticle
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  @Mutation(() => Article)
+  async updateArticle(
+    @Arg('input') input: ArticleInput
+  ): Promise<Partial<Article> | undefined> {
+    try {
+      const { id } = input
+      if (id) {
+        const article = await Article.findOneByOrFail({ id })
+        const savedArticle = await Article.save({ ...article, ...input })
+        return savedArticle
+      } else {
+        return
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  @Mutation(() => Article)
+  async softDeleteArticle(
+    @Arg('id') id: number
+  ): Promise<Partial<Article> | undefined> {
+    try {
+      const article = await Article.findOneByOrFail({ id })
+      article.deletedAt = new Date()
+      Article.save(article)
+      return article
     } catch (error) {
       console.error(error)
     }

@@ -14,9 +14,10 @@ type Article {
 }
 
 input ArticleInput {
-  short_description: String!
-  text: String!
-  title: String!
+  id: Float
+  short_description: String
+  text: String
+  title: String
 }
 
 """
@@ -27,6 +28,8 @@ scalar DateTime
 type Mutation {
   createArticle(input: ArticleInput!): Article!
   createUser(input: UserInput!): User!
+  softDeleteArticle(id: Float!): Article!
+  updateArticle(input: ArticleInput!): Article!
 }
 
 type Query {
