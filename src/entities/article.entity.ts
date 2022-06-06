@@ -18,7 +18,7 @@ export class Article extends BaseEntity {
   id!: number
 
   @Field(() => String)
-  @Column()
+  @Column({ unique: true })
   title!: string
 
   @Field(() => String)

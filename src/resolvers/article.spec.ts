@@ -80,6 +80,40 @@ describe('Article resolvers', () => {
         expect(errors?.[0]).toBeInstanceOf(GraphQLError)
 
         expect(response?.data).toBeNull()
+      }),
+      it('should fail with duplicate title', async () => {
+        const createArticle = `
+        mutation Mutation($input: ArticleInput!) {
+          createArticle(input: $input) {
+            id
+            short_description
+            title
+            text
+            createdAt
+            updatedAt
+            deletedAt
+          }
+        }`
+
+        const response = await gqlCall({
+          source: createArticle,
+          variableValues: {
+            input: {
+              title: 'test title',
+              short_description: 'bla bla bla',
+              text: 'Un grand bla bla bla',
+            },
+          },
+        })
+
+        const data = response?.data
+        expect(data).toBeNull()
+
+        const error = response?.errors?.[0]
+        expect(error).toBeInstanceOf(GraphQLError)
+        expect(error?.message).toContain(
+          'QueryFailedError: duplicate key value violates unique constraint'
+        )
       })
   }),
     describe('Read =>', () => {
@@ -196,6 +230,30 @@ describe('Article resolvers', () => {
             expect(data).toHaveProperty('createdAt')
             expect(data).toHaveProperty('updatedAt')
             expect(data).toHaveProperty('id', createdId)
+          }),
+          it('fail with incorrect id', async () => {
+            const response = await gqlCall({
+              source: updateArticle,
+              variableValues: {
+                input: {
+                  id: Number(createdId + 5),
+                  title: 'test title full update',
+                  short_description: 'test short_description full update',
+                  text: 'test text full update',
+                },
+              },
+            })
+
+            const data = response?.data
+            expect(data).toBeNull()
+
+            const error = response?.errors?.[0]
+            expect(error).toBeInstanceOf(GraphQLError)
+            expect(error?.message).toBe(
+              `EntityNotFoundError: Could not find any entity of type \"Article\" matching: {
+    \"id\": ${createdId + 5}
+}`
+            )
           })
       })
     }),

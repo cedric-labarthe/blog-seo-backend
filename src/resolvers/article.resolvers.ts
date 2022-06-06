@@ -21,12 +21,11 @@ export class ArticleResolvers {
     @Arg('input') input: ArticleInput
   ): Promise<Partial<Article> | undefined> {
     try {
-      // TODO add validation
       const newArticle = Article.create({ ...input })
       await newArticle.save()
       return newArticle
     } catch (error) {
-      console.error(error)
+      throw new Error(`${error}`)
     }
   }
 
@@ -44,7 +43,7 @@ export class ArticleResolvers {
         return
       }
     } catch (error) {
-      console.error(error)
+      throw new Error(`${error}`)
     }
   }
 
@@ -58,7 +57,7 @@ export class ArticleResolvers {
       Article.save(article)
       return article
     } catch (error) {
-      console.error(error)
+      throw new Error(`${error}`)
     }
   }
 }
