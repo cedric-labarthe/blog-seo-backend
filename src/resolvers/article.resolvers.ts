@@ -35,13 +35,9 @@ export class ArticleResolvers {
   ): Promise<Partial<Article> | undefined> {
     try {
       const { id } = input
-      if (id) {
-        const article = await Article.findOneByOrFail({ id })
-        const savedArticle = await Article.save({ ...article, ...input })
-        return savedArticle
-      } else {
-        return
-      }
+      const article = await Article.findOneByOrFail({ id })
+      const savedArticle = await Article.save({ ...article, ...input })
+      return savedArticle
     } catch (error) {
       throw new Error(`${error}`)
     }

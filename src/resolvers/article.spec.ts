@@ -258,20 +258,19 @@ describe('Article resolvers', () => {
       })
     }),
     describe('Delete =>', () => {
+      const softDeleteArticle = `
+        mutation Mutation($softDeleteArticleId: Float!) {
+          softDeleteArticle(id: $softDeleteArticleId) {
+            id
+            title
+            short_description
+            text
+            createdAt
+            updatedAt
+            deletedAt
+          }
+        }`
       it('should soft delete an article by id', async () => {
-        const softDeleteArticle = `
-      mutation Mutation($softDeleteArticleId: Float!) {
-        softDeleteArticle(id: $softDeleteArticleId) {
-          id
-          title
-          short_description
-          text
-          createdAt
-          updatedAt
-          deletedAt
-        }
-      }`
-
         const response = await gqlCall({
           source: softDeleteArticle,
           variableValues: {
@@ -294,6 +293,25 @@ describe('Article resolvers', () => {
         expect(data).toHaveProperty('deletedAt')
         expect(data.deletedAt).not.toBeNull()
         expect(typeof data.deletedAt).toBe('string')
-      })
+      }),
+        it('fail with incorrect id', async () => {
+          const response = await gqlCall({
+            source: softDeleteArticle,
+            variableValues: {
+              softDeleteArticleId: Number(createdId + 5),
+            },
+          })
+
+          const data = response?.data
+          expect(data).toBeNull()
+
+          const error = response?.errors?.[0]
+          expect(error).toBeInstanceOf(GraphQLError)
+          expect(error?.message).toBe(
+            `EntityNotFoundError: Could not find any entity of type \"Article\" matching: {
+    \"id\": ${createdId + 5}
+}`
+          )
+        })
     })
 })
