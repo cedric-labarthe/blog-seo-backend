@@ -2,6 +2,8 @@ import { DataSource } from 'typeorm'
 import entities from '../../entities'
 import migrations from '../../migrations'
 
+// TODO run on test launch
+
 export const createTestConnection = () => {
   try {
     return new DataSource({
@@ -13,6 +15,7 @@ export const createTestConnection = () => {
       database: process.env.DB_NAME || 'test',
       synchronize: true,
       dropSchema: true,
+      logging: true,
       entities,
       subscribers: [],
       migrations,
