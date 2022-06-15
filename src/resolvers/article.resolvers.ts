@@ -5,13 +5,18 @@ import { Article, ArticleInput } from '../entities'
 export class ArticleResolvers {
   @Query(() => Article)
   async getArticle(@Arg('id') id: number): Promise<Article | undefined> {
-    const article = await Article.findOneByOrFail({ id, deletedAt: undefined })
+    const article = await Article.findOneOrFail({
+      where: { id, deletedAt: undefined },
+      relations: ['medias'],
+    })
     return article
   }
 
   @Query(() => [Article])
   async getArticles(): Promise<Article[]> {
-    const [articles, articlesCount] = await Article.findAndCount()
+    const [articles, articlesCount] = await Article.findAndCount({
+      relations: ['medias'],
+    })
     console.info(articlesCount)
     return articles
   }

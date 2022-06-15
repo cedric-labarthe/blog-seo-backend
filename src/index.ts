@@ -1,6 +1,7 @@
 import 'reflect-metadata'
 
 import express from 'express'
+import cors from 'cors'
 import './configs/env'
 
 import { ApolloServer } from 'apollo-server-express'
@@ -33,6 +34,13 @@ const init = async () => {
     await apolloServer.start()
     apolloServer.applyMiddleware({ app })
 
+    const corsOptions = {
+      origin: 'http://localhost:3000',
+      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    }
+
+    app.use(cors(corsOptions))
+    app.use('/images', express.static('public/images'))
     app.use('/api/services', servicesRouter)
     app.listen(PORT)
 

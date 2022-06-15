@@ -8,6 +8,7 @@ beforeAll(async () => {
   connection = await createTestConnection()!.initialize()
 })
 afterAll(async () => {
+  await connection.dropDatabase()
   await connection.destroy()
 })
 

@@ -1,14 +1,16 @@
 import express, { Request, Response } from 'express'
 import multer, { FileFilterCallback } from 'multer'
+import { Media } from '../entities'
 
 const router = express.Router()
 
 const storage = multer.diskStorage({
   destination(_, __, callback) {
-    callback(null, '/uploads/images') // TODO add error handler
+    callback(null, 'public/images') // TODO add error handler
   },
   filename(_, file, callback) {
-    callback(null, file.originalname) // TODO add error handler AND see for unique media name/upload
+    const sanitizedFileName = file.originalname.replace(/\s/g, '_') // TODO Add special characters
+    callback(null, sanitizedFileName) // TODO add error handler AND see for unique media name/upload
   },
 })
 
@@ -35,11 +37,31 @@ const uploadImage = async (req: Request, res: Response) => {
 
   console.info(image)
 
+  //   {
+  //   fieldname: 'file',
+  //   originalname: 'Image (119).jpg',
+  //   encoding: '7bit',
+  //   mimetype: 'image/jpeg',
+  //   destination: 'public/images',
+  //   filename: 'Image (119).jpg',
+  //   path: 'public/images/Image (119).jpg',
+  //   size: 528164
+  // }
+
+  const path = `${process.env.URL || 'http://localhost:8000/images/'}${
+    image?.filename
+  }`
+
+  console.info(path)
+
+  const newMedia = Media.create({ path, articleId: 1 })
+  await newMedia.save()
+
   // TODO save path in db
 
   res.send('Success and path')
 }
 
-router.post('/upload-image', upload.single, uploadImage)
+router.post('/upload-image', upload.single('file'), uploadImage)
 
 export default router

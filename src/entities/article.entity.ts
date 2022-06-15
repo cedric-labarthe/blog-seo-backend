@@ -6,9 +6,11 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
+import { Media } from './media.entity'
 
 @Entity()
 @ObjectType()
@@ -40,6 +42,10 @@ export class Article extends BaseEntity {
   @Field(() => Date, { nullable: true })
   @DeleteDateColumn({ nullable: true })
   deletedAt?: Date
+
+  @Field(() => [Media], { defaultValue: [] })
+  @OneToMany(() => Media, (media) => media.articleId)
+  medias: [Media]
 }
 
 @InputType()

@@ -7,6 +7,7 @@ type Article {
   createdAt: DateTime!
   deletedAt: DateTime
   id: ID!
+  medias: [Media!]
   short_description: String!
   text: String!
   title: String!
@@ -25,16 +26,45 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 """
 scalar DateTime
 
+type Media {
+  articleId: ID
+  createdAt: DateTime!
+  deletedAt: DateTime
+  id: ID!
+  path: String!
+  type: MediaType!
+  updatedAt: DateTime
+}
+
+input MediaInput {
+  articleId: ID
+  id: Float
+  path: String!
+  type: MediaType!
+}
+
+"""Type of media"""
+enum MediaType {
+  AUDIO
+  IMAGE
+  VIDEO
+}
+
 type Mutation {
   createArticle(input: ArticleInput!): Article!
+  createMedia(input: MediaInput!): Media!
   createUser(input: UserInput!): User!
   softDeleteArticle(id: Float!): Article!
+  softDeleteMedia(id: Float!): Media!
   updateArticle(input: ArticleInput!): Article!
 }
 
 type Query {
   getArticle(id: Float!): Article!
   getArticles: [Article!]!
+  getMedia(id: Float!): Media!
+  getMedias: [Media!]!
+  getMediasByType(type: MediaType!): [Media!]!
   getUser(id: Float!): User!
 }
 
