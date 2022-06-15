@@ -11,9 +11,11 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm'
+import { Article } from './article.entity'
 
 export enum MediaType {
   IMAGE = 'image',
@@ -52,6 +54,10 @@ export class Media extends BaseEntity {
   @Field(() => Date, { nullable: true })
   @DeleteDateColumn({ nullable: true })
   deletedAt?: Date
+
+  @Field(() => ID, { nullable: true })
+  @ManyToOne(() => Article, (article) => article.medias)
+  articleId?: Article['id']
 }
 
 @InputType()
@@ -64,4 +70,7 @@ export class MediaInput {
 
   @Field(() => String)
   path: string
+
+  @Field(() => ID, { nullable: true })
+  articleId?: number
 }

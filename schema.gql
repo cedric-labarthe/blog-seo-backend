@@ -7,6 +7,7 @@ type Article {
   createdAt: DateTime!
   deletedAt: DateTime
   id: ID!
+  medias: [Media!]
   short_description: String!
   text: String!
   title: String!
@@ -26,6 +27,7 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 scalar DateTime
 
 type Media {
+  articleId: ID
   createdAt: DateTime!
   deletedAt: DateTime
   id: ID!
@@ -35,6 +37,7 @@ type Media {
 }
 
 input MediaInput {
+  articleId: ID
   id: Float
   path: String!
   type: MediaType!
